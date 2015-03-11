@@ -46,7 +46,9 @@ defmodule ExAws.Config do
     :erlcloud_aws.default_config
       |> aws_config(ddb_scheme: conf[:ddb_scheme])
       |> aws_config(ddb_host: conf[:ddb_host])
-      |> aws_config(ddb_port: conf[:ddb_port])
+      |> aws_config(access_key_id: conf[:access_key_id])
+      |> aws_config(secret_access_key: conf[:secret_access_key])
+      #|> aws_config(ddb_port: conf[:ddb_port])
   end
 
 
@@ -65,9 +67,10 @@ defmodule ExAws.Config do
   def namespace(data = %{}, :dynamo), do: data
 
   def namespace(name, :dynamo) when is_atom(name) or is_binary(name) do
-    [name, Application.get_env(:ex_aws, :ddb_namespace)]
-      |> Enum.filter(&(&1))
-      |> Enum.join("-")
+    #[name, Application.get_env(:ex_aws, :ddb_namespace)]
+      #|> Enum.filter(&(&1))
+      #|> Enum.join("-")
+    name
   end
 
   ## Kinesis

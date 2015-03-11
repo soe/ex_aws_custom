@@ -25,6 +25,10 @@ defmodule ExAws.Dynamo.Conversions do
     %{S: val}
   end
 
+  def do_dynamize(val) when is_list(val) do
+    %{SS: val}
+  end
+
   # Convert structures and their attributes
   def dynamize(%{__struct__: _} = record) do
     record
@@ -58,6 +62,8 @@ defmodule ExAws.Dynamo.Conversions do
   def undynamize(%{"M" => value}),   do: value |> undynamize
   def undynamize(%{"N" => value}) when is_binary(value), do: binary_to_number(value)
   def undynamize(%{"N" => value}) when value |> is_integer or value |> is_float, do: value
+  def undynamize(%{"SS" => value}),  do: value
+  def undynamize(%{"L" => value}),  do: value
   def undynamize(item = %{}) do
     item |> Enum.reduce(%{}, fn({k, v}, map) ->
       Map.put(map, k, undynamize(v))
